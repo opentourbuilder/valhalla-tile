@@ -7,11 +7,19 @@ jobs:
     container: ghcr.io/gis-ops/docker-valhalla/valhalla:latest
     steps:
     
-    - name: Generate Tile
+    - name: Download Dependencies
+      run: sudo apt install wget -y
+        
+    - name: Download OSM PBF
+      run: sudo wget -q https://download.geofabrik.de/north-america/us/south-carolina-latest.osm.pbf
+      
+    - name: Start Mjolnir Build    
       run: |
-        sudo apt install wget -y
-        sudo wget https://download.geofabrik.de/north-america/us/south-carolina-latest.osm.pbf
         sudo mkdir -p valhalla_tiles
         sudo valhalla_build_config | sudo tee -a valhalla.json
         sudo valhalla_build_tiles -c valhalla.json south-carolina-latest.osm.pbf
-        ls -al
+        
+    - name: Test
+      run: |
+        ls -al ./valhalla_tiles
+        ls -al /data/valhalla
