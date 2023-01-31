@@ -9,7 +9,7 @@ jobs:
     
     - name: Generate Tile
       run: |
-        apt install wget -y
+        sudo apt install wget -y
         wget https://download.geofabrik.de/north-america/us/south-carolina-latest.osm.pbf
         mkdir -p valhalla_tiles
         valhalla_build_config > valhalla.json
