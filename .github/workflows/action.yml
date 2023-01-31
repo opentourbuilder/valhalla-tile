@@ -15,11 +15,14 @@ jobs:
       
     - name: Start Mjolnir Build    
       run: |
-        sudo mkdir -p valhalla_tiles
         sudo valhalla_build_config | sudo tee -a valhalla.json
         sudo valhalla_build_tiles -c valhalla.json south-carolina-latest.osm.pbf
         
-    - name: Test
-      run: |
-        ls -al ./valhalla_tiles
-        ls -al /data/valhalla
+    - name: Tar Archive Valhalla Tiles
+      run: tar -cf valhalla_tiles.tar /data/valhalla
+    
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: valhalla_tiles
+        path: ./valhalla_tiles.tar
