@@ -19,9 +19,7 @@ jobs:
         sudo valhalla_build_tiles -c valhalla.json south-carolina-latest.osm.pbf
         
     - name: Tar Archive Valhalla Tiles
-      run: |
-        sudo cd /data/valhalla
-        sudo tar -cf valhalla_tiles.tar ./
+      run: sudo tar -cf valhalla_tiles.tar -C /data/valhalla/ .
     
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v3
