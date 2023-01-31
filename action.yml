@@ -1,0 +1,13 @@
+# action.yml
+name: 'Container IO'
+description: 'Metadata action to interact with Docker container during workflow'
+inputs:
+  url:  # id of input
+    description: 'URL of where the OSM PBF data can be downloaded'
+    required: true
+    default: 'https://download.geofabrik.de/north-america/us/south-carolina-latest.osm.pbf'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.url }}
