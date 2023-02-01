@@ -1,6 +1,18 @@
-on:
-  workflow_dispatch:
+name: Automatic Tile Generation and Release
 
+on:
+  push:
+    branches: [ "main" ]
+    paths-ignore:
+    - README.md
+
+  pull_request:
+    branches: [ "main" ]
+    paths-ignore:
+    - README.md
+  
+  workflow_dispatch:
+  
 jobs:
   generate_tile:
     runs-on: ubuntu-latest
@@ -9,7 +21,8 @@ jobs:
     
     - name: Download Dependencies
       run: sudo apt install wget -y
-        
+    
+    # Note that this is hardcoded to download and generate tile only for South Carolina at the moment
     - name: Download OSM PBF
       run: sudo wget -q https://download.geofabrik.de/north-america/us/south-carolina-latest.osm.pbf
       
@@ -24,3 +37,11 @@ jobs:
       with:
         name: tiles
         path: /data/valhalla/tiles.tar
+
+    - name: Create Automatic Release
+      uses: marvinpinto/action-automatic-releases@latest
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        prerelease: false
+        automatic_release_tag: latest
+        files: /data/valhalla/tiles.tar
