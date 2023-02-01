@@ -38,10 +38,20 @@ jobs:
         name: tiles
         path: /data/valhalla/tiles.tar
 
-    - name: Create Automatic Release
-      uses: marvinpinto/action-automatic-releases@latest
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        prerelease: false
-        automatic_release_tag: latest
-        files: /data/valhalla/tiles.tar
+  release:
+    needs: generate_tile
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          path: ~/artifact
+
+      - name: Create Automatic Release
+        uses: marvinpinto/action-automatic-releases@latest
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          prerelease: false
+          automatic_release_tag: latest
+          files: /home/runner/artifact/tiles/tiles.tar
