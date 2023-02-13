@@ -31,12 +31,13 @@ jobs:
         sudo valhalla_build_config | sudo tee -a valhalla.json
         sudo valhalla_build_tiles -c valhalla.json south-carolina-latest.osm.pbf
         sudo valhalla_build_extract -c valhalla.json
+        sudo mv /data/valhalla/tiles.tar /data/valhalla/valhalla_tiles.tar
 
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v3
       with:
-        name: tiles
-        path: /data/valhalla/tiles.tar
+        name: valhalla_tiles
+        path: /data/valhalla/valhalla_tiles.tar
 
   release:
     needs: generate_tile
@@ -54,4 +55,4 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           prerelease: false
           automatic_release_tag: latest
-          files: /home/runner/artifact/tiles/tiles.tar
+          files: /home/runner/artifact/valhalla_tiles/valhalla_tiles.tar
